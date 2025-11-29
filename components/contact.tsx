@@ -4,6 +4,7 @@ import type React from "react"
 
 import { useState } from "react"
 import { Mail, Linkedin, Github, Twitter } from "lucide-react"
+import Turnstile from "./Turnstile"
 
 export function Contact() {
   const [formData, setFormData] = useState({
@@ -11,6 +12,8 @@ export function Contact() {
     email: "",
     message: "",
   })
+  const [token, setToken] = useState<string | null>(null)
+
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
@@ -84,9 +87,18 @@ export function Contact() {
                   required
                 />
               </div>
+
+
+                      <Turnstile
+        sitekey={import.meta.env.VITE_TURNSTILE_SITEKEY as string}
+        onVerify={(t) => setToken(t)}
+      />
+
+
               <button
                 type="submit"
-                className="w-full rounded-lg bg-primary px-4 py-3 font-semibold text-primary-foreground transition-smooth hover:bg-primary/90"
+                disabled={!token}
+                className="w-full rounded-lg bg-primary px-4 py-3 font-semibold text-primary-foreground"
               >
                 Send Message
               </button>
@@ -134,7 +146,7 @@ export function Contact() {
                     href={href}
                     className="flex items-center gap-3 rounded-lg border border-border bg-card p-3 transition-smooth hover:border-accent hover:bg-card/50"
                   >
-                    <Icon className="h-5 w-5 text-accent flex-shrink-0" />
+                    <Icon className="h-5 w-5 text-accent shrink-0" />
                     <div>
                       <p className="text-sm font-medium text-foreground">{label}</p>
                       <p className="text-xs text-muted-foreground">{value}</p>
