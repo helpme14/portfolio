@@ -6,11 +6,7 @@ import { Mail, Linkedin, Github, Twitter } from "lucide-react"
 import Turnstile from "./Turnstile"
 
 export function Contact() {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    message: "",
-  })
+  const [formData, setFormData] = useState({ name: "", email: "", message: "" })
   const [token, setToken] = useState<string | null>(null)
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -36,9 +32,7 @@ export function Contact() {
           <div className="text-center">
             <span className="text-sm font-semibold text-accent uppercase tracking-widest">Get In Touch</span>
             <h2 className="mt-2 text-4xl sm:text-5xl font-bold text-foreground">Let's Talk</h2>
-            <p className="mt-4 text-lg text-muted-foreground">
-              I'm always interested in hearing about new projects and opportunities.
-            </p>
+            <p className="mt-4 text-lg text-muted-foreground">I'm always interested in hearing about new projects and opportunities.</p>
           </div>
 
           <div className="grid gap-8 md:grid-cols-2">
@@ -83,27 +77,40 @@ export function Contact() {
                 />
               </div>
 
-              <Turnstile
-                sitekey={import.meta.env.VITE_TURNSTILE_SITEKEY as string}
-                onVerify={handleVerify}
-              />
+              <Turnstile sitekey={import.meta.env.VITE_TURNSTILE_SITEKEY as string} onVerify={handleVerify} />
 
               <button
                 type="submit"
                 disabled={!token}
-                className="w-full rounded-lg bg-primary px-4 py-3 font-semibold text-primary-foreground"
+                className={`w-full rounded-lg px-4 py-3 font-semibold text-primary-foreground transition-transform motion-safe:transform-gpu focus:outline-none ${
+                  token
+                    ? "bg-primary hover:scale-105 active:scale-95 shadow-md"
+                    : "bg-primary/60 cursor-not-allowed opacity-70"
+                } flex items-center justify-center gap-2`}
               >
-                Send Message
+                {token ? (
+                  <>
+                    <svg className="h-4 w-4 animate-pulse" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+                      <path d="M5 13l4 4L19 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                    <span>Send Message</span>
+                  </>
+                ) : (
+                  <>
+                    <svg className="h-4 w-4 opacity-60" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+                      <path d="M12 4v8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                      <path d="M20 12a8 8 0 10-16 0 8 8 0 0016 0z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                    <span>Send Message</span>
+                  </>
+                )}
               </button>
             </form>
 
             <div className="space-y-6">
               <div className="space-y-3">
                 <h3 className="text-lg font-semibold text-accent">Connect With Me</h3>
-                <p className="text-muted-foreground">
-                  Feel free to reach out through any of these channels. I'm always happy to connect and discuss
-                  opportunities.
-                </p>
+                <p className="text-muted-foreground">Feel free to reach out through any of these channels. I'm always happy to connect and discuss opportunities.</p>
               </div>
 
               <div className="space-y-3">
