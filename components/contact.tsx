@@ -14,12 +14,13 @@ export function Contact() {
     setFormData((prev) => ({ ...prev, [name]: value }))
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    console.log(formData)
-    setFormData({ name: "", email: "", message: "" })
-    setToken(null)
-  }
+const handleSubmit = (e: React.FormEvent) => {
+  e.preventDefault()
+  console.log(formData)
+  setFormData({ name: "", email: "", message: "" })
+  setToken(null)
+  window.dispatchEvent(new Event("turnstile-reset"))
+}
 
   const handleVerify = useCallback((t: string) => {
     setToken(t)

@@ -13,6 +13,7 @@ export default function Turnstile({ sitekey, onVerify }: { sitekey: string, onVe
   const container = useRef<HTMLDivElement | null>(null)
   const widgetId = useRef<number | null>(null)
   const tries = useRef(0)
+
   useEffect(() => {
     if (!sitekey) return
     if (!document.getElementById(SCRIPT_ID)) {
@@ -45,7 +46,21 @@ export default function Turnstile({ sitekey, onVerify }: { sitekey: string, onVe
       } catch {}
     }
 
-    window.addEventListener("turnstile-load", tryRender)
+    const onLoad = tryRender
+    const onReset = () => {
+      try {
+        if ((window as any).turnstile && widgetId.current !== null) {
+          ;(window as any).turnstile.reset(widgetId.current)
+        } else {
+          widgetId.current = null
+          tryRender()
+        }
+      } catch {}
+    }
+
+    window.addEventListener("turnstile-load", onLoad)
+    window.addEventListener("turnstile-reset", onReset as EventListener)
+
     interval = window.setInterval(() => {
       if (tries.current > 20) {
         if (interval) {
@@ -60,7 +75,8 @@ export default function Turnstile({ sitekey, onVerify }: { sitekey: string, onVe
     tryRender()
 
     return () => {
-      window.removeEventListener("turnstile-load", tryRender)
+      window.removeEventListener("turnstile-load", onLoad)
+      window.removeEventListener("turnstile-reset", onReset as EventListener)
       if (interval) window.clearInterval(interval)
       try {
         if ((window as any).turnstile && widgetId.current !== null) {
