@@ -16,6 +16,8 @@ export default function Turnstile({ sitekey, onVerify }: { sitekey: string, onVe
 
   useEffect(() => {
     if (!sitekey) return
+    
+    // Load script only once
     if (!document.getElementById(SCRIPT_ID)) {
       const s = document.createElement("script")
       s.id = SCRIPT_ID
@@ -34,16 +36,22 @@ export default function Turnstile({ sitekey, onVerify }: { sitekey: string, onVe
       tries.current++
       if (!container.current) return
       if (!(window as any).turnstile) return
-      if (widgetId.current !== null) return
+      if (widgetId.current !== null) return // Already rendered
       if (!container.current.isConnected) return
       if ((container.current as HTMLElement).offsetParent === null) return
+      
       try {
-        widgetId.current = (window as any).turnstile.render(container.current, { sitekey, callback: onVerify })
+        widgetId.current = (window as any).turnstile.render(container.current, { 
+          sitekey, 
+          callback: onVerify 
+        })
         if (interval) {
           window.clearInterval(interval)
           interval = null
         }
-      } catch {}
+      } catch (e) {
+        console.error("Turnstile render error:", e)
+      }
     }
 
     const onLoad = tryRender
@@ -55,7 +63,9 @@ export default function Turnstile({ sitekey, onVerify }: { sitekey: string, onVe
           widgetId.current = null
           tryRender()
         }
-      } catch {}
+      } catch (e) {
+        console.error("Turnstile reset error:", e)
+      }
     }
 
     window.addEventListener("turnstile-load", onLoad)
@@ -80,13 +90,17 @@ export default function Turnstile({ sitekey, onVerify }: { sitekey: string, onVe
       if (interval) window.clearInterval(interval)
       try {
         if ((window as any).turnstile && widgetId.current !== null) {
-          ;(window as any).turnstile.reset(widgetId.current)
+          ;(window as any).turnstile.remove(widgetId.current) // Use remove instead of reset
         }
-      } catch {}
+      } catch (e) {
+        console.error("Turnstile cleanup error:", e)
+      }
       widgetId.current = null
       if (container.current) container.current.innerHTML = ""
     }
   }, [sitekey, onVerify])
+
+  return <div ref={container} />
 
   return <div ref={container} />
 }

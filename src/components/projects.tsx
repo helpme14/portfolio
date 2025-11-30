@@ -1,9 +1,9 @@
 "use client"
 
 import type React from "react"
-
 import { useState } from "react"
 import { ArrowRight, Github, Heart } from "lucide-react"
+import { motion } from "framer-motion"
 
 interface Project {
   id: number
@@ -50,6 +50,7 @@ interface FloatingHeart {
   y: number
 }
 
+
 export function Projects() {
   const [likes, setLikes] = useState<Record<number, number>>({})
   const [floatingHearts, setFloatingHearts] = useState<FloatingHeart[]>([])
@@ -82,19 +83,49 @@ export function Projects() {
   }
 
   return (
-    <section id="projects" className="px-4 py-20 sm:px-6 lg:px-8 border-t border-border">
+    <motion.section
+      id="projects"
+      className="px-4 py-20 sm:px-6 lg:px-8 border-t border-border"
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.3 }}
+      transition={{ duration: 0.8, ease: "easeOut" }}
+    >
       <div className="mx-auto max-w-6xl">
-        <div className="space-y-12">
-          <div>
+        <motion.div
+          className="space-y-12"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.3 }}
+          variants={{
+            hidden: {},
+            visible: {
+              transition: {
+                staggerChildren: 0.15,
+              },
+            },
+          }}
+        >
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.7, ease: "easeOut" }}
+          >
             <span className="text-sm font-semibold text-accent uppercase tracking-widest">Portfolio</span>
             <h2 className="mt-2 text-4xl sm:text-5xl font-bold text-foreground">Featured Projects</h2>
-          </div>
+          </motion.div>
 
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-            {projects.map((project) => (
-              <div
+            {projects.map((project, idx) => (
+              <motion.div
                 key={project.id}
                 className="group relative rounded-lg border border-border bg-card p-6 transition-smooth hover:border-accent hover:bg-card/50"
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.2 }}
+                transition={{ duration: 0.6, delay: idx * 0.1, ease: "easeOut" }}
+                whileHover={{ scale: 1.03, boxShadow: "0 8px 32px rgba(0,0,0,0.10)" }}
               >
                 <div className="space-y-4">
                   <h3 className="text-lg font-semibold text-foreground group-hover:text-accent transition-colors">
@@ -125,37 +156,41 @@ export function Projects() {
                         Code <Github className="h-4 w-4" />
                       </a>
                     </div>
-                    <button
+                    <motion.button
                       onClick={(e) => handleLike(project.id, e)}
                       className="flex items-center gap-1 text-sm font-medium text-muted-foreground hover:text-red-500 transition-colors"
                       aria-label={`Like ${project.title}`}
+                      whileTap={{ scale: 0.9 }}
                     >
                       <Heart className="h-4 w-4 animate-like" fill={likes[project.id] ? "currentColor" : "none"} />
                       <span className={likes[project.id] ? "text-red-500" : ""}>{likes[project.id] || 0}</span>
-                    </button>
+                    </motion.button>
                   </div>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
-        </div>
+        </motion.div>
       </div>
 
       {/* Floating hearts container */}
       <div className="fixed inset-0 pointer-events-none">
         {floatingHearts.map((heart) => (
-          <div
+          <motion.div
             key={heart.id}
             className="absolute animate-float-up"
             style={{
               left: `${heart.x}px`,
               top: `${heart.y}px`,
             }}
+            initial={{ opacity: 1, y: 0 }}
+            animate={{ opacity: 0, y: -60 }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
           >
             <Heart className="h-6 w-6 text-red-500" fill="currentColor" />
-          </div>
+          </motion.div>
         ))}
       </div>
-    </section>
+    </motion.section>
   )
 }
