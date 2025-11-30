@@ -1,173 +1,145 @@
-import { motion, useScroll, useTransform } from "framer-motion"
-import { useRef } from "react"
+import { motion, useScroll, useTransform } from 'framer-motion'
+import { ArrowRight, Download } from 'lucide-react'
 
 export function Hero() {
-  const ref = useRef(null)
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start start", "end start"]
-  })
-  
-  const y = useTransform(scrollYProgress, [0, 1], ["0%", "50%"])
-  const opacity = useTransform(scrollYProgress, [0, 1], [1, 0])
+  const { scrollY } = useScroll()
+  const y = useTransform(scrollY, [0, 300], [0, 100])
+  const opacity = useTransform(scrollY, [0, 300], [1, 0])
 
   return (
-    <motion.section
-      ref={ref}
-      className="relative overflow-hidden px-4 py-32 sm:px-6 lg:px-8 min-h-screen flex items-center"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.8 }}
-    >
-      {/* Animated background gradient with parallax */}
-      <motion.div className="absolute inset-0 -z-10" style={{ y }}>
-        <motion.div 
-          className="absolute top-0 right-0 h-[500px] w-[500px] rounded-full bg-primary/20 blur-3xl"
-          animate={{
-            scale: [1, 1.2, 1],
-            x: [0, 50, 0],
-            y: [0, 30, 0],
-          }}
-          transition={{
-            duration: 8,
-            repeat: Infinity,
-            ease: "easeInOut"
-          }}
-        />
-        <motion.div 
-          className="absolute -bottom-20 left-0 h-[500px] w-[500px] rounded-full bg-accent/20 blur-3xl"
-          animate={{
-            scale: [1, 1.3, 1],
-            x: [0, -30, 0],
-            y: [0, 50, 0],
-          }}
-          transition={{
-            duration: 10,
-            repeat: Infinity,
-            ease: "easeInOut"
-          }}
-        />
-      </motion.div>
+    <section className="bg-background relative flex min-h-screen items-center justify-center overflow-hidden">
+      {/* Subtle Background Gradient Orbs - minimalistic */}
+      <div
+        className="absolute top-10 left-6 h-96 w-96 rounded-full blur-3xl"
+        style={{ backgroundColor: 'rgba(0, 194, 255, 0.12)' }}
+      />
+      <div
+        className="absolute right-6 bottom-10 h-96 w-96 rounded-full blur-3xl"
+        style={{ backgroundColor: 'rgba(0, 194, 255, 0.1)' }}
+      />
 
-      <motion.div className="mx-auto max-w-4xl relative z-10" style={{ opacity }}>
+      {/* Subtle Grid Pattern Overlay */}
+      <div className="bg-grid-white/[0.01] absolute inset-0 bg-size-[50px_50px]" />
+
+      {/* Content */}
+      <motion.div
+        style={{ y, opacity }}
+        className="relative z-10 mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8"
+      >
         <motion.div
-          className="space-y-8"
-          initial="hidden"
-          animate="visible"
-          variants={{
-            visible: {
-              transition: {
-                staggerChildren: 0.15,
-              },
-            },
-          }}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: 'easeOut' }}
         >
-          {/* Text reveal animation */}
-          <motion.div className="space-y-6 overflow-hidden">
-            <motion.h1 
-              className="text-6xl sm:text-7xl lg:text-8xl font-bold leading-tight"
-              variants={{
-                hidden: { opacity: 0, y: 50, filter: "blur(10px)" },
-                visible: { opacity: 1, y: 0, filter: "blur(0px)" },
-              }}
-              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            >
-              <span className="block text-foreground">Full Stack</span>
-              <motion.span 
-                className="block bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent bg-[length:200%_auto]"
-                animate={{
-                  backgroundPosition: ["0%", "100%", "0%"],
-                }}
-                transition={{
-                  duration: 5,
-                  repeat: Infinity,
-                  ease: "linear"
-                }}
-              >
-                Engineer
-              </motion.span>
-            </motion.h1>
-            
-            <motion.p 
-              className="text-xl sm:text-2xl text-muted-foreground leading-relaxed max-w-2xl"
-              variants={{
-                hidden: { opacity: 0, y: 30, filter: "blur(10px)" },
-                visible: { opacity: 1, y: 0, filter: "blur(0px)" },
-              }}
-              transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-            >
-              Crafting scalable web applications and elegant software solutions. I specialize in building performant,
-              user-centric digital experiences with modern technologies.
-            </motion.p>
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="border-border bg-card mb-8 inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-sm font-normal backdrop-blur-sm"
+            aria-label="Online availability"
+          >
+            <span className="relative flex h-2 w-2">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-500 opacity-50" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
+            </span>
+            <span className="text-muted-foreground">
+              Available for opportunities
+            </span>
           </motion.div>
 
-          {/* Magnetic buttons */}
-          <motion.div
-            className="flex flex-wrap gap-4"
-            variants={{
-              hidden: { opacity: 0, y: 20 },
-              visible: { opacity: 1, y: 0 },
-            }}
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.3 }}
+            className="mb-6 text-5xl font-semibold tracking-tight sm:text-6xl lg:text-7xl"
+          >
+            Hi, I'm{' '}
+            <motion.span
+              className="gradient-text-bright inline-block"
+              animate={{ backgroundPosition: ['0%', '100%', '0%'] }}
+              transition={{ duration: 6, repeat: Infinity, ease: 'linear' }}
+            >
+              GIO SICAT
+            </motion.span>
+          </motion.h1>
+
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
+            className="text-muted-foreground mx-auto mb-6 max-w-2xl text-lg sm:text-xl"
+          >
+            Building clean, fast web apps end-to-end. I care about minimal UI,
+            accessible design, and reliable backends.
+          </motion.p>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.6 }}
+            className="flex flex-wrap justify-center gap-4"
           >
             <motion.a
               href="#projects"
-              className="group relative inline-flex items-center gap-2 rounded-full bg-primary px-8 py-4 font-semibold text-primary-foreground overflow-hidden"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+              className="group bg-foreground text-background border-foreground hover:bg-primary hover:border-primary inline-flex items-center gap-2 rounded-lg border px-6 py-3 text-sm font-medium transition-all hover:-translate-y-0.5"
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
             >
-              <motion.span
-                className="absolute inset-0 bg-gradient-to-r from-primary to-accent"
-                initial={{ x: "-100%" }}
-                whileHover={{ x: "0%" }}
-                transition={{ duration: 0.3 }}
-              />
-              <span className="relative z-10">View My Work</span>
-              <motion.span
-                className="relative z-10"
-                animate={{ x: [0, 5, 0] }}
-                transition={{ duration: 1.5, repeat: Infinity }}
-              >
-                →
-              </motion.span>
+              View My Work
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
             </motion.a>
-            
             <motion.a
               href="#contact"
-              className="group relative inline-flex items-center gap-2 rounded-full border-2 border-accent bg-transparent px-8 py-4 font-semibold text-accent overflow-hidden"
-              whileHover={{ scale: 1.05, borderColor: "transparent" }}
-              whileTap={{ scale: 0.95 }}
+              className="group text-foreground border-border hover:border-foreground hover:bg-foreground/5 inline-flex items-center gap-2 rounded-lg border bg-transparent px-6 py-3 text-sm font-medium transition-all"
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
             >
-              <motion.span
-                className="absolute inset-0 bg-accent/10"
-                initial={{ scale: 0, opacity: 0 }}
-                whileHover={{ scale: 1, opacity: 1 }}
-                transition={{ duration: 0.3 }}
-              />
-              <span className="relative z-10">Get in Touch</span>
+              Get in Touch
+              <Download className="h-4 w-4" />
             </motion.a>
-          </motion.div>
-
-          {/* Scroll indicator */}
-          <motion.div
-            className="absolute bottom-8 left-1/2 -translate-x-1/2"
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1, duration: 0.8 }}
-          >
-            <motion.div
-              className="flex flex-col items-center gap-2 text-muted-foreground"
-              animate={{ y: [0, 10, 0] }}
-              transition={{ duration: 2, repeat: Infinity }}
-            >
-              <span className="text-sm">Scroll to explore</span>
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                <path d="M12 5v14m0 0l7-7m-7 7l-7-7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-            </motion.div>
           </motion.div>
         </motion.div>
       </motion.div>
-    </motion.section>
+
+      {/* Scroll Indicator */}
+      <motion.div
+        style={{ opacity }}
+        className="absolute bottom-8 left-1/2 z-20 -translate-x-1/2 cursor-pointer"
+        onClick={() =>
+          document
+            .getElementById('about')
+            ?.scrollIntoView({ behavior: 'smooth' })
+        }
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, delay: 1 }}
+      >
+        <div className="group flex flex-col items-center gap-2">
+          <span className="text-muted-foreground group-hover:text-primary text-sm font-medium transition-colors">
+            Scroll to explore
+          </span>
+          <motion.div
+            animate={{ y: [0, 8, 0] }}
+            transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
+            className="border-primary/50 group-hover:border-primary rounded-full border-2 p-2 transition-colors"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="text-primary"
+            >
+              <path d="M12 5v14M19 12l-7 7-7-7" />
+            </svg>
+          </motion.div>
+        </div>
+      </motion.div>
+    </section>
   )
 }

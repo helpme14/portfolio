@@ -1,17 +1,17 @@
-import { Header } from "../components/header"
-import { Hero } from "../components/hero"
-import { About } from "../components/about"
-import { Projects } from "../components/projects"
-import { Skills } from "../components/skills"
-import { Contact } from "../components/contact"
-import { Footer } from "../components/footer"
-import { CursorGlow } from "../components/cursor-glow"
+import { About } from '../components/about'
+import { Contact } from '../components/contact'
+import { CursorGlow } from '../components/cursor-glow'
+import { Footer } from '../components/footer'
+import { Header } from '../components/header'
+import { Hero } from '../components/hero'
+import { Projects } from '../components/projects'
+import { Skills } from '../components/skills'
 
 function App() {
   return (
     <>
       <CursorGlow />
-      <main className="min-h-screen relative">
+      <main className="relative min-h-screen">
         <Header />
         <Hero />
         <About />

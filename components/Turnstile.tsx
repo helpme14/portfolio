@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react"
+import { useEffect, useRef } from 'react'
 
 declare global {
   interface Window {
@@ -6,28 +6,34 @@ declare global {
   }
 }
 
-const SCRIPT_ID = "cf-turnstile-js"
-const SCRIPT_SRC = "https://challenges.cloudflare.com/turnstile/v0/api.js"
+const SCRIPT_ID = 'cf-turnstile-js'
+const SCRIPT_SRC = 'https://challenges.cloudflare.com/turnstile/v0/api.js'
 
-export default function Turnstile({ sitekey, onVerify }: { sitekey: string, onVerify: (token: string) => void }) {
+export default function Turnstile({
+  sitekey,
+  onVerify,
+}: {
+  sitekey: string
+  onVerify: (token: string) => void
+}) {
   const container = useRef<HTMLDivElement | null>(null)
   const widgetId = useRef<number | null>(null)
   const tries = useRef(0)
 
   useEffect(() => {
     if (!sitekey) return
-    
+
     // Load script only once
     if (!document.getElementById(SCRIPT_ID)) {
-      const s = document.createElement("script")
+      const s = document.createElement('script')
       s.id = SCRIPT_ID
       s.src = SCRIPT_SRC
       s.async = true
       s.defer = true
-      s.onload = () => window.dispatchEvent(new Event("turnstile-load"))
+      s.onload = () => window.dispatchEvent(new Event('turnstile-load'))
       document.head.appendChild(s)
     } else if ((window as any).turnstile) {
-      window.dispatchEvent(new Event("turnstile-load"))
+      window.dispatchEvent(new Event('turnstile-load'))
     }
 
     let interval: number | null = null
@@ -39,18 +45,18 @@ export default function Turnstile({ sitekey, onVerify }: { sitekey: string, onVe
       if (widgetId.current !== null) return // Already rendered
       if (!container.current.isConnected) return
       if ((container.current as HTMLElement).offsetParent === null) return
-      
+
       try {
-        widgetId.current = (window as any).turnstile.render(container.current, { 
-          sitekey, 
-          callback: onVerify 
+        widgetId.current = (window as any).turnstile.render(container.current, {
+          sitekey,
+          callback: onVerify,
         })
         if (interval) {
           window.clearInterval(interval)
           interval = null
         }
       } catch (e) {
-        console.error("Turnstile render error:", e)
+        console.error('Turnstile render error:', e)
       }
     }
 
@@ -64,12 +70,12 @@ export default function Turnstile({ sitekey, onVerify }: { sitekey: string, onVe
           tryRender()
         }
       } catch (e) {
-        console.error("Turnstile reset error:", e)
+        console.error('Turnstile reset error:', e)
       }
     }
 
-    window.addEventListener("turnstile-load", onLoad)
-    window.addEventListener("turnstile-reset", onReset as EventListener)
+    window.addEventListener('turnstile-load', onLoad)
+    window.addEventListener('turnstile-reset', onReset as EventListener)
 
     interval = window.setInterval(() => {
       if (tries.current > 20) {
@@ -85,18 +91,18 @@ export default function Turnstile({ sitekey, onVerify }: { sitekey: string, onVe
     tryRender()
 
     return () => {
-      window.removeEventListener("turnstile-load", onLoad)
-      window.removeEventListener("turnstile-reset", onReset as EventListener)
+      window.removeEventListener('turnstile-load', onLoad)
+      window.removeEventListener('turnstile-reset', onReset as EventListener)
       if (interval) window.clearInterval(interval)
       try {
         if ((window as any).turnstile && widgetId.current !== null) {
           ;(window as any).turnstile.remove(widgetId.current) // Use remove instead of reset
         }
       } catch (e) {
-        console.error("Turnstile cleanup error:", e)
+        console.error('Turnstile cleanup error:', e)
       }
       widgetId.current = null
-      if (container.current) container.current.innerHTML = ""
+      if (container.current) container.current.innerHTML = ''
     }
   }, [sitekey, onVerify])
 

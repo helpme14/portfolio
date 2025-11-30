@@ -1,52 +1,94 @@
-@import "tailwindcss";
-@import "tw-animate-css";
+@import 'tailwindcss';
+@import 'tw-animate-css';
 
 @custom-variant dark (&:is(.dark *));
 
+/* Light theme (default) using the new teal/cyan accent palette */
 :root {
-  /* <CHANGE> Updated to dark theme with teal/cyan accents */
-  --background: oklch(0.12 0 0);
-  --foreground: oklch(0.95 0 0);
-  --card: oklch(0.15 0 0);
-  --card-foreground: oklch(0.95 0 0);
-  --popover: oklch(0.15 0 0);
-  --popover-foreground: oklch(0.95 0 0);
-  --primary: oklch(0.56 0.21 200);
-  --primary-foreground: oklch(0.12 0 0);
-  --secondary: oklch(0.25 0 0);
-  --secondary-foreground: oklch(0.95 0 0);
-  --muted: oklch(0.35 0 0);
-  --muted-foreground: oklch(0.65 0 0);
-  --accent: oklch(0.62 0.22 198);
-  --accent-foreground: oklch(0.12 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --destructive-foreground: oklch(0.95 0 0);
+  --background: oklch(0.985 0 0); /* near white */
+  --foreground: oklch(0.16 0 0); /* deep neutral for text */
+  --card: oklch(0.99 0 0);
+  --card-foreground: var(--foreground);
+  --popover: var(--card);
+  --popover-foreground: var(--foreground);
+  --primary: oklch(0.62 0.22 198); /* vibrant teal */
+  --primary-foreground: oklch(0.99 0 0); /* white text for contrast */
+  --secondary: oklch(0.94 0.01 200); /* subtle tinted surface */
+  --secondary-foreground: var(--foreground);
+  --muted: oklch(0.92 0 0);
+  --muted-foreground: oklch(0.55 0 0);
+  --accent: oklch(0.67 0.18 200); /* slightly lighter teal for hovers */
+  --accent-foreground: oklch(0.12 0 0); /* dark text on lighter accent */
+  --accent-bright: oklch(
+    0.75 0.2 200
+  ); /* bright cyan for highlighted important words */
+  --destructive: oklch(0.57 0.245 27.3);
+  --destructive-foreground: oklch(0.99 0 0);
+  --border: oklch(0.9 0 0);
+  --input: oklch(0.9 0 0);
+  --ring: var(--primary);
+  --chart-1: var(--primary);
+  --chart-2: var(--accent);
+  --chart-3: oklch(0.55 0.16 185);
+  --chart-4: oklch(0.5 0.14 195);
+  --chart-5: oklch(0.58 0.18 205);
+  --radius: 0.5rem;
+  --sidebar: var(--card);
+  --sidebar-foreground: var(--foreground);
+  --sidebar-primary: var(--primary);
+  --sidebar-primary-foreground: var(--primary-foreground);
+  --sidebar-accent: var(--accent);
+  --sidebar-accent-foreground: var(--accent-foreground);
+  --sidebar-border: var(--border);
+  --sidebar-ring: var(--ring);
+}
+
+/* Dark theme matching screenshot: near-black background + cyan/teal accents */
+.dark {
+  --background: oklch(0.13 0 0); /* almost black */
+  --foreground: oklch(0.95 0 0); /* near white text */
+  --card: oklch(0.16 0 0);
+  --card-foreground: var(--foreground);
+  --popover: oklch(0.16 0 0);
+  --popover-foreground: var(--foreground);
+  --primary: oklch(0.7 0.25 200); /* bright saturated cyan */
+  --primary-foreground: oklch(
+    0.95 0 0
+  ); /* switched to near-white for better contrast */
+  --secondary: oklch(0.24 0 0);
+  --secondary-foreground: var(--foreground);
+  --muted: oklch(0.34 0 0);
+  --muted-foreground: oklch(0.66 0 0);
+  --accent: oklch(0.75 0.26 198); /* vibrant bright cyan from screenshot */
+  --accent-foreground: oklch(0.95 0 0); /* near-white for readability */
+  --accent-bright: oklch(
+    0.8 0.28 200
+  ); /* even brighter cyan emphasis in dark mode */
+  --destructive: oklch(0.57 0.245 27.3);
+  --destructive-foreground: var(--foreground);
   --border: oklch(0.22 0 0);
   --input: oklch(0.18 0 0);
-  --ring: oklch(0.56 0.21 200);
-  --chart-1: oklch(0.56 0.21 200);
-  --chart-2: oklch(0.62 0.22 198);
+  --ring: var(--primary);
+  --chart-1: var(--primary);
+  --chart-2: var(--accent);
   --chart-3: oklch(0.48 0.18 185);
   --chart-4: oklch(0.4 0.15 195);
   --chart-5: oklch(0.54 0.2 205);
   --radius: 0.5rem;
-  --sidebar: oklch(0.15 0 0);
-  --sidebar-foreground: oklch(0.95 0 0);
-  --sidebar-primary: oklch(0.56 0.21 200);
-  --sidebar-primary-foreground: oklch(0.12 0 0);
-  --sidebar-accent: oklch(0.62 0.22 198);
-  --sidebar-accent-foreground: oklch(0.12 0 0);
-  --sidebar-border: oklch(0.22 0 0);
-  --sidebar-ring: oklch(0.56 0.21 200);
-}
-
-.dark {
-  /* ... existing code ... */
+  --sidebar: oklch(0.16 0 0);
+  --sidebar-foreground: var(--foreground);
+  --sidebar-primary: var(--primary);
+  --sidebar-primary-foreground: var(--primary-foreground);
+  --sidebar-accent: var(--accent);
+  --sidebar-accent-foreground: var(--accent-foreground);
+  --sidebar-border: var(--border);
+  --sidebar-ring: var(--ring);
 }
 
 @theme inline {
-  --font-sans: "Geist", "Geist Fallback";
-  --font-mono: "Geist Mono", "Geist Mono Fallback";
+  --font-sans:
+    'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -91,11 +133,38 @@
   }
   body {
     @apply bg-background text-foreground;
+    font-family: var(--font-sans);
+    font-weight: 400;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   /* <CHANGE> Added smooth scroll and scrollbar styling */
   html {
     scroll-behavior: smooth;
+  }
+
+  /* Minimalistic heading styles */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-weight: 600;
+    letter-spacing: -0.025em;
+    line-height: 1.2;
+  }
+
+  h1 {
+    font-size: clamp(2.5rem, 5vw, 4rem);
+  }
+  h2 {
+    font-size: clamp(2rem, 4vw, 3rem);
+  }
+  h3 {
+    font-size: clamp(1.5rem, 3vw, 2rem);
   }
 
   /* Custom scrollbar */
@@ -120,10 +189,167 @@
 /* <CHANGE> Added smooth transitions and animations */
 @layer utilities {
   .transition-smooth {
-    @apply transition-all duration-300 ease-out;
+    transition-property: all;
+    transition-duration: 300ms;
+    transition-timing-function: ease-out;
   }
 
+  /* Minimalistic gradient text - subtle and refined */
   .gradient-text {
-    @apply bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent;
+    background: linear-gradient(
+      135deg,
+      var(--foreground),
+      var(--primary),
+      var(--foreground)
+    );
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: gradientShift 8s ease-in-out infinite;
+  }
+
+  /* Subtle text highlight - no heavy glow */
+  .text-highlight {
+    color: var(--accent);
+  }
+
+  /* Clean gradient for important text */
+  .gradient-text-bright {
+    background: linear-gradient(
+      135deg,
+      var(--foreground) 0%,
+      var(--primary) 50%,
+      var(--foreground) 100%
+    );
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: gradientShift 8s ease-in-out infinite;
+  }
+
+  /* Explicit color utility fallbacks (in case Tailwind theme tokens aren't generating them) */
+  .text-accent {
+    color: var(--accent) !important;
+  }
+  .text-primary {
+    color: var(--primary) !important;
+  }
+  .text-foreground {
+    color: var(--foreground) !important;
+  }
+  .text-muted-foreground {
+    color: var(--muted-foreground) !important;
+  }
+  .bg-accent\/15,
+  .bg-accent\/\[15\%\],
+  .bg-accent\/\[0\.15\] {
+    background-color: color-mix(
+      in oklch,
+      var(--accent) 15%,
+      transparent
+    ) !important;
+  }
+  .bg-primary\/15,
+  .bg-primary\/\[15\%\],
+  .bg-primary\/\[0\.15\] {
+    background-color: color-mix(
+      in oklch,
+      var(--primary) 15%,
+      transparent
+    ) !important;
+  }
+  .bg-muted {
+    background-color: var(--muted) !important;
+  }
+
+  /* Minimalistic heading styles - clean and professional */
+  .heading-xl {
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    line-height: 1.1;
+  }
+  .heading-lg {
+    font-weight: 600;
+    letter-spacing: -0.025em;
+    font-size: clamp(2rem, 4vw, 3rem);
+    line-height: 1.2;
+  }
+  .heading-md {
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    line-height: 1.3;
+  }
+
+  /* Clean accent color without glow */
+  .heading-accent {
+    color: var(--accent);
+  }
+
+  /* Minimalistic button styles */
+  .btn-primary {
+    background-color: var(--foreground);
+    color: var(--background);
+    border: 1px solid var(--foreground);
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    font-size: 0.9375rem;
+    transition: all 0.2s ease;
+  }
+
+  .btn-primary:hover {
+    background-color: var(--primary);
+    border-color: var(--primary);
+    transform: translateY(-1px);
+  }
+
+  .btn-secondary {
+    background-color: transparent;
+    color: var(--foreground);
+    border: 1px solid color-mix(in oklch, var(--foreground) 30%, transparent);
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    font-size: 0.9375rem;
+    transition: all 0.2s ease;
+  }
+
+  .btn-secondary:hover {
+    border-color: var(--foreground);
+    background-color: color-mix(in oklch, var(--foreground) 5%, transparent);
+  }
+
+  /* Body copy refinement */
+  .text-soft {
+    color: var(--muted-foreground);
+  }
+  .text-emphasis {
+    color: var(--primary);
+    font-weight: 600;
+  }
+
+  /* Smooth color transitions when hovering */
+  .color-fade {
+    transition:
+      color 0.25s ease,
+      background-color 0.25s ease,
+      box-shadow 0.3s ease;
+  }
+}
+
+/* Shared gradient animation for text */
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
   }
 }

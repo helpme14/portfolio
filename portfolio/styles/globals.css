@@ -3,6 +3,8 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* NOTE: This legacy globals file retains the old neutral palette. The active palette is defined in `../globals.css`.
+  Consider removing this file or aligning values to avoid confusion. */
 :root {
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
