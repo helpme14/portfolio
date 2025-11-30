@@ -69,12 +69,11 @@ export function Skills() {
             viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 0.7, ease: 'easeOut' }}
           >
-            <span className="border-accent/40 bg-accent/10 text-accent inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-semibold tracking-wider uppercase">
-              <span className="bg-accent h-2 w-2 animate-pulse rounded-full" />{' '}
-              Expertise
+            <span className="inline-flex items-center gap-2 rounded-full border border-white bg-transparent px-3 py-1 text-xs font-semibold tracking-wider text-white uppercase">
+              <span className="h-2 w-2 rounded-full bg-white" /> Expertise
             </span>
             <h2 className="mt-5 text-4xl font-bold sm:text-5xl lg:text-6xl">
-              <span className="from-primary via-accent to-primary bg-linear-to-r bg-clip-text text-transparent">
+              <span className="gradient-text-bright inline-block">
                 Skills & Technologies
               </span>
             </h2>
