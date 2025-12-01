@@ -7,14 +7,14 @@ export function Hero() {
   const opacity = useTransform(scrollY, [0, 300], [1, 0])
 
   return (
-    <section className="bg-background relative flex min-h-screen items-center justify-center overflow-hidden">
+    <section className="bg-background relative flex min-h-svh items-center justify-center overflow-hidden">
       {/* Subtle Background Gradient Orbs - minimalistic */}
       <div
-        className="absolute top-10 left-6 h-96 w-96 rounded-full blur-3xl"
+        className="absolute top-10 left-6 h-64 w-64 rounded-full blur-3xl sm:h-96 sm:w-96"
         style={{ backgroundColor: 'rgba(0, 194, 255, 0.12)' }}
       />
       <div
-        className="absolute right-6 bottom-10 h-96 w-96 rounded-full blur-3xl"
+        className="absolute right-6 bottom-10 h-64 w-64 rounded-full blur-3xl sm:h-96 sm:w-96"
         style={{ backgroundColor: 'rgba(0, 194, 255, 0.1)' }}
       />
 
@@ -24,7 +24,7 @@ export function Hero() {
       {/* Content */}
       <motion.div
         style={{ y, opacity }}
-        className="relative z-10 mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8"
+        className="relative z-10 mx-auto -mt-40 max-w-4xl px-4 text-center sm:px-6 md:-mt-40 lg:px-8"
       >
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -59,7 +59,7 @@ export function Hero() {
               animate={{ backgroundPosition: ['0%', '100%', '0%'] }}
               transition={{ duration: 6, repeat: Infinity, ease: 'linear' }}
             >
-              GIO SICAT
+              Geeyow
             </motion.span>
           </motion.h1>
 

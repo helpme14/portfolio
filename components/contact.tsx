@@ -32,7 +32,7 @@ export function Contact() {
   return (
     <motion.section
       id="contact"
-      className="border-border border-t px-4 py-20 sm:px-6 lg:px-8"
+      className="border-border overflow-x-hidden border-t px-4 py-20 sm:px-6 lg:px-8"
       initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.2 }}
@@ -64,7 +64,7 @@ export function Contact() {
           <div className="grid gap-8 md:grid-cols-2">
             <motion.form
               onSubmit={handleSubmit}
-              className="space-y-4"
+              className="min-w-0 space-y-4"
               initial={{ opacity: 0, x: -30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true, amount: 0.2 }}
@@ -124,11 +124,12 @@ export function Contact() {
                   required
                 />
               </div>
-
-              <Turnstile
-                sitekey={import.meta.env.VITE_TURNSTILE_SITEKEY as string}
-                onVerify={handleVerify}
-              />
+              <div className="w-full overflow-x-hidden">
+                <Turnstile
+                  sitekey={import.meta.env.VITE_TURNSTILE_SITEKEY as string}
+                  onVerify={handleVerify}
+                />
+              </div>
 
               <div className="mt-4 flex w-full items-center justify-center">
                 <motion.button
@@ -189,7 +190,7 @@ export function Contact() {
             </motion.form>
 
             <motion.div
-              className="space-y-6"
+              className="min-w-0 space-y-6"
               initial={{ opacity: 0, x: 30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true, amount: 0.2 }}
@@ -235,7 +236,7 @@ export function Contact() {
                   <motion.a
                     key={label}
                     href={href}
-                    className="border-primary/40 bg-card/50 hover:border-accent hover:bg-card/70 flex items-center gap-3 rounded-lg border p-3 transition-colors"
+                    className="border-primary/40 bg-card/50 hover:border-accent hover:bg-card/70 flex w-full items-center gap-3 rounded-lg border p-3 transition-colors"
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, amount: 0.2 }}
@@ -251,7 +252,9 @@ export function Contact() {
                       <p className="text-foreground text-sm font-medium">
                         {label}
                       </p>
-                      <p className="text-muted-foreground text-xs">{value}</p>
+                      <p className="text-muted-foreground text-xs wrap-break-word">
+                        {value}
+                      </p>
                     </div>
                   </motion.a>
                 ))}
