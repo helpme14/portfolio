@@ -27,7 +27,7 @@ export function Contact() {
     setIsSubmitting(true)
 
     try {
-      const verifyResponse = await fetch('http://localhost:3000/verify', {
+      const verifyResponse = await fetch('/api/verify', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ token }),
