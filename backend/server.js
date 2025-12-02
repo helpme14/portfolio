@@ -9,7 +9,7 @@ const app = express()
 app.use(express.json())
 app.use(cors())
 
-app.post('/verify', async (req, res) => {
+app.post(['/verify', '/api/verify'], async (req, res) => {
   const token = req.body.token
   if (!token)
     return res.status(400).json({ success: false, message: 'Missing token' })
