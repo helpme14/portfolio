@@ -114,7 +114,7 @@ export default function Turnstile({
       widgetId.current = null
       if (container.current) container.current.innerHTML = ''
     }
-  }, [sitekey, onVerify])
+  }, [sitekey, onVerify, onError, onTimeout])
 
   return <div ref={container} />
 }
