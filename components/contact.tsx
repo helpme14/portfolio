@@ -9,6 +9,8 @@ import Turnstile from './Turnstile'
 export function Contact() {
   const [formData, setFormData] = useState({ name: '', email: '', message: '' })
   const [token, setToken] = useState<string | null>(null)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [turnstileError, setTurnstileError] = useState(false)
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -17,16 +19,52 @@ export function Contact() {
     setFormData((prev) => ({ ...prev, [name]: value }))
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    console.log(formData)
-    setFormData({ name: '', email: '', message: '' })
-    setToken(null)
-    window.dispatchEvent(new Event('turnstile-reset'))
+
+    if (!token || isSubmitting) return
+
+    setIsSubmitting(true)
+
+    try {
+      const verifyResponse = await fetch('http://localhost:3000/verify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token }),
+      })
+
+      const verifyResult = await verifyResponse.json()
+
+      if (!verifyResult.success) {
+        alert('Security verification failed. Please try again.')
+        setIsSubmitting(false)
+        return
+      }
+
+      // TODO: Send form data to your email service or backend
+      // await fetch('/api/send-email', { method: 'POST', body: JSON.stringify(formData) })
+
+      alert('Message sent successfully!')
+
+      setFormData({ name: '', email: '', message: '' })
+      setToken(null)
+      setTurnstileError(false)
+      window.dispatchEvent(new Event('turnstile-reset'))
+    } catch (error) {
+      alert('Failed to send message. Please try again.')
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   const handleVerify = useCallback((t: string) => {
     setToken(t)
+    setTurnstileError(false)
+  }, [])
+
+  const handleTurnstileError = useCallback(() => {
+    setTurnstileError(true)
+    setToken(null)
   }, [])
 
   return (
@@ -128,22 +166,52 @@ export function Contact() {
                 <Turnstile
                   sitekey={import.meta.env.VITE_TURNSTILE_SITEKEY as string}
                   onVerify={handleVerify}
+                  onError={handleTurnstileError}
+                  onTimeout={handleTurnstileError}
                 />
+                {turnstileError && (
+                  <p className="text-destructive mt-2 text-sm">
+                    Security verification failed. Please refresh the page.
+                  </p>
+                )}
               </div>
 
               <div className="mt-4 flex w-full items-center justify-center">
                 <motion.button
                   type="submit"
-                  disabled={!token}
+                  disabled={!token || isSubmitting}
                   className={`flex w-full items-center justify-center gap-2 rounded-lg border px-4 py-3 font-semibold transition-transform focus:outline-none ${
-                    token
+                    token && !isSubmitting
                       ? 'border-foreground bg-foreground text-background hover:bg-primary hover:border-primary hover:scale-[1.02] active:scale-95'
                       : 'border-border bg-muted text-muted-foreground cursor-not-allowed opacity-70'
                   }`}
-                  whileHover={token ? { scale: 1.02 } : {}}
-                  whileTap={token ? { scale: 0.98 } : {}}
+                  whileHover={token && !isSubmitting ? { scale: 1.02 } : {}}
+                  whileTap={token && !isSubmitting ? { scale: 0.98 } : {}}
                 >
-                  {token ? (
+                  {isSubmitting ? (
+                    <>
+                      <svg
+                        className="h-4 w-4 animate-spin"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                      >
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                        />
+                        <path
+                          className="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                        />
+                      </svg>
+                      <span>Sending...</span>
+                    </>
+                  ) : token ? (
                     <>
                       <svg
                         className="h-4 w-4 animate-pulse"

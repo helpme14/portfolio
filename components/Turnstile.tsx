@@ -12,9 +12,13 @@ const SCRIPT_SRC = 'https://challenges.cloudflare.com/turnstile/v0/api.js'
 export default function Turnstile({
   sitekey,
   onVerify,
+  onError,
+  onTimeout,
 }: {
   sitekey: string
   onVerify: (token: string) => void
+  onError?: () => void
+  onTimeout?: () => void
 }) {
   const container = useRef<HTMLDivElement | null>(null)
   const widgetId = useRef<number | null>(null)
@@ -50,13 +54,18 @@ export default function Turnstile({
         widgetId.current = (window as any).turnstile.render(container.current, {
           sitekey,
           callback: onVerify,
+          'error-callback': onError,
+          'timeout-callback': onTimeout,
+          'expired-callback': () => {
+            if (onError) onError()
+          },
         })
         if (interval) {
           window.clearInterval(interval)
           interval = null
         }
       } catch (e) {
-        console.error('Turnstile render error:', e)
+        // Silent failure - widget will retry
       }
     }
 
@@ -70,7 +79,7 @@ export default function Turnstile({
           tryRender()
         }
       } catch (e) {
-        console.error('Turnstile reset error:', e)
+        // Silent failure - will retry on next attempt
       }
     }
 
@@ -96,17 +105,15 @@ export default function Turnstile({
       if (interval) window.clearInterval(interval)
       try {
         if ((window as any).turnstile && widgetId.current !== null) {
-          ;(window as any).turnstile.remove(widgetId.current) // Use remove instead of reset
+          ;(window as any).turnstile.remove(widgetId.current)
         }
       } catch (e) {
-        console.error('Turnstile cleanup error:', e)
+        // Silent cleanup failure
       }
       widgetId.current = null
       if (container.current) container.current.innerHTML = ''
     }
   }, [sitekey, onVerify])
-
-  return <div ref={container} />
 
   return <div ref={container} />
 }
