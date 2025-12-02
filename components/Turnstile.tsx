@@ -34,6 +34,7 @@ export default function Turnstile({
       s.src = SCRIPT_SRC
       s.async = true
       s.defer = true
+      s.setAttribute('data-cfasync', 'false') // Prevent Cloudflare Insights
       s.onload = () => window.dispatchEvent(new Event('turnstile-load'))
       document.head.appendChild(s)
     } else if ((window as any).turnstile) {
