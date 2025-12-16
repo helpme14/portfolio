@@ -41,8 +41,16 @@ export function Contact() {
         return
       }
 
-      // TODO: Send form data to your email service or backend
-      // await fetch('/api/send-email', { method: 'POST', body: JSON.stringify(formData) })
+      // Send form data to email service
+      const emailResponse = await fetch('/api/send-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      })
+
+      if (!emailResponse.ok) {
+        throw new Error('Failed to send email')
+      }
 
       alert('Message sent successfully!')
 
